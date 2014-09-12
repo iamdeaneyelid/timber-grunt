@@ -43,3 +43,13 @@ Thumbs.db
 config.yml
 /_site
 assets/logo.png
+
+# Grunt #
+######################
+timber.scss.liquid
+shopify.json
+node_modules
+assets/*.png
+assets/*.jpg
+assets/*.gif
+assets/*.svg
