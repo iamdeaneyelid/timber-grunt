@@ -1,3 +1,5 @@
+**Note**: this is now out of date as the Shopify team has been making great (and frequent) updates to Timber. Please use this as a demonstration of what Timber + Grunt are capable of as a combo.
+
 # timber-grunt
 
 Timber is an amazing theme framework from Shopify. This repo is more of an introduction or guideline to get it set up with Grunt.
