@@ -1,15 +1,15 @@
 {
   "name": "timber-grunt",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "devDependencies": {
-    "grunt": "~0.4.1",
-    "grunt-contrib-clean": "~0.5.0",
-    "grunt-contrib-compress": "~0.9.1",
-    "grunt-contrib-concat": "~0.4.0",
-    "grunt-contrib-imagemin": "^0.7.1",
-    "grunt-contrib-watch": "~0.6.1",
-    "grunt-notify": "~0.3.0",
-    "grunt-shopify": "~0.5.2",
-    "load-grunt-tasks": "~0.3.0"
+    "grunt": "~0.4.*",
+    "grunt-contrib-clean": "~0.5.*",
+    "grunt-contrib-compress": "~0.9.*",
+    "grunt-contrib-concat": "~0.4.*",
+    "grunt-contrib-imagemin": "^0.7.*",
+    "grunt-contrib-watch": "~0.6.*",
+    "grunt-notify": "~0.3.*",
+    "grunt-shopify": "~0.5.*",
+    "load-grunt-tasks": "~0.3.*"
   }
 }

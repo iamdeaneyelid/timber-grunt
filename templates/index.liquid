@@ -1,3 +1,4 @@
+<!-- /templates/index.liquid -->
 {% comment %}
 
   This is the homepage of your site.
@@ -6,7 +7,7 @@
     - http://docs.shopify.com/themes/liquid-variables/global
 {% endcomment %}
 
-<h2>Frontpage Collection</h2>
+<h2>{{ 'homepage.sections.frontpage_title' | t }}</h2>
 
 {% comment %}
   Use class grid-uniform to have evenly sized columns clear
@@ -31,39 +32,15 @@
     {% include 'product-grid-item' %}
 
   {% else %}
+    {% comment %}
+      For onboarding new users to your theme, we add some default products and onboarding tutorials to help populate their store
+    {% endcomment %}
+    {% unless emptyState %}
+      {{ 'theme-onboarding.css' | global_asset_url | stylesheet_tag }}
+      {% assign emptyState = true %}
+    {% endunless %}
 
-    <div class="grid-item">
-      <p>You have no products in your Frontpage collection. This placeholder will appear until you <a href="/admin/custom_collections">add a product to this collection</a>.</p>
-    </div>
-
-    <div class="grid-item">
-      <div class="grid-uniform">
-        <div class="grid-item large--one-quarter medium--one-half text-center">
-          <a href="/admin/products" class="demo-image">
-            Add a Product
-          </a>
-          <p><a href="/admin/products">Example Product Title</a> $19.99</p>
-        </div>
-        <div class="grid-item large--one-quarter medium--one-half text-center">
-          <a href="/admin/products" class="demo-image">
-            Add a Product
-          </a>
-          <p><a href="/admin/products">Example Product Title</a> $19.99</p>
-        </div>
-        <div class="grid-item large--one-quarter medium--one-half text-center">
-          <a href="/admin/products" class="demo-image">
-            Add a Product
-          </a>
-          <p><a href="/admin/products">Example Product Title</a> $19.99</p>
-        </div>
-        <div class="grid-item large--one-quarter medium--one-half text-center">
-          <a href="/admin/products" class="demo-image">
-            Add a Product
-          </a>
-          <p><a href="/admin/products">Example Product Title</a> $19.99</p>
-        </div>
-      </div>
-    </div>
+    {% include 'onboarding-featured-products' %}
 
   {% endfor %}
 
@@ -71,7 +48,7 @@
 
 <hr>
 
-<h2>Featured Collections</h2>
+<h2>{{ 'homepage.sections.featured_title' | t }}</h2>
 
 <div class="grid-uniform">
 
@@ -93,53 +70,42 @@
       {% unless collection.handle == 'frontpage' %}
         {% assign isEmpty = false %}
         {% assign collection_item_width = 'large--one-fifth medium--one-third' %}
-        {% include 'collection-grid-item' %}
-        {% comment %}Add 1 to the current index{% endcomment %}
+        <div class="grid__item {{ collection_item_width }} text-center">
+          {% comment %}
+            Use capture to put the collection title in a variable that is used in liquid filters
+          {% endcomment %}
+          {% capture collection_title %}{{ collection.title | escape }}{% endcapture %}
+
+          <a href="{{ collection.url }}" title="{{ 'collections.general.link_title' | t: title: collection_title }}" class="grid__image">
+            {% if collection.image %}
+              {{ collection.image.src | img_url: 'large' | img_tag: collection_title }}
+            {% else %}
+              {{ collection.products.first.featured_image | img_url: 'large' | img_tag: collection_title }}
+            {% endif %}
+          </a>
+
+          <p>
+            <a href="{{ collection.url }}" title="{{ 'collections.general.link_title' | t: title: collection_title }}">{{ collection.title }}</a><br>
+            {{ 'collections.general.items_with_count' | t: count: collection.all_products_count }}
+          </p>
+        </div>
         {% assign index = index | plus: 1 %}
       {% endunless %}
 
     {% endunless %}
-
   {% endfor %}
 
+  {% comment %}
+    For onboarding new users to your theme, we add some default collections and onboarding tutorials to help populate their store
+  {% endcomment %}
+
   {% if isEmpty %}
-    <div class="grid-item">
-      <p>You don't have any collections to show here. <a href="/admin/custom_collections">Add some collections</a> to go along with the default Frontpage.</p>
-    </div>
-    <div class="grid-item">
-      <div class="grid-uniform">
-        <div class="grid-item large--one-fifth medium--one-half text-center">
-          <div class="demo-image">
-            Collection Image
-          </div>
-          <p><a href="/admin/custom_collections">Example Collection Title</a> <small>(3 items)</small></p>
-        </div>
-        <div class="grid-item large--one-fifth medium--one-half text-center">
-          <div class="demo-image">
-            Collection Image
-          </div>
-          <p><a href="/admin/custom_collections">Example Collection Title</a> <small>(13 items)</small></p>
-        </div>
-        <div class="grid-item large--one-fifth medium--one-half text-center">
-          <div class="demo-image">
-            Collection Image
-          </div>
-          <p><a href="/admin/custom_collections">Example Collection Title</a> <small>(25 items)</small></p>
-        </div>
-        <div class="grid-item large--one-fifth medium--one-half text-center">
-          <div class="demo-image">
-            Collection Image
-          </div>
-          <p><a href="/admin/custom_collections">Example Collection Title</a> <small>(25 items)</small></p>
-        </div>
-        <div class="grid-item large--one-fifth medium--one-half text-center">
-          <div class="demo-image">
-            Collection Image
-          </div>
-          <p><a href="/admin/custom_collections">Example Collection Title</a> <small>(25 items)</small></p>
-        </div>
-      </div>
-    </div>
+    {% unless emptyState %}
+      {{ 'theme-onboarding.css' | global_asset_url | stylesheet_tag }}
+      {% assign emptyState = true %}
+    {% endunless %}
+
+    {% include 'onboarding-featured-collections' %}
   {% endif %}
 
 </div>
@@ -153,16 +119,14 @@
   handle we want to focus on. For this example we'll use the default 'news',
   but you can create a blog page-specific content if you want.
 {% endcomment %}
-<h2>Latest News</h2>
+<h2>{{ 'homepage.sections.news_title' | t }}</h2>
 
 <div class="grid">
   {% for article in blogs['news'].articles limit:3 %}
 
-    <div class="grid-item large--one-third">
+    <div class="grid__item large--one-third">
 
-      <time pubdate datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
-        {{ article.published_at | date: '%b %d, %Y' }}
-      </time>
+      <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: format: 'month_day_year' }}</time>
       <h3><a href="{{ article.url }}">{{ article.title }}</a></h3>
 
       {% comment %}
@@ -181,21 +145,17 @@
         Show off meta information like number of comments and tags.
       {% endcomment %}
       <ul>
-
-        {% comment %}
-          Don't be fooled, the ? in comments_enabled? is part of the liquid tag.
-        {% endcomment %}
         {% if blog.comments_enabled? %}
         <li>
           <a href="{{ article.url }}#comments">
-            {{ article.comments_count }} {{ article.comments_count | pluralize: 'comment','comments' }}
+            {{ article.comments_count }}
+            {{ 'blogs.comments.comments_with_count' | t: count: article.comments_count }}
           </a>
         </li>
         {% endif %}
-
       </ul>
 
-      <p><a href="{{ article.url }}">Read more &rarr;</a></p>
+      <p><a href="{{ article.url }}">{{ 'blogs.article.read_more' | t }} &rarr;</a></p>
 
     </div>
 
